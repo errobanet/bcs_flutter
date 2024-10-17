@@ -62,14 +62,15 @@ class _MyAppState extends State<MyApp> {
       /// Manejar permisos denegados
     }
     else {
-      String result = await _verifyFace(code);
+      var result = await _verifyFace(code);
       setState(() {
-        _result = result;
+        _result = result.toString();
       });
     }
   }
 
-  Future<String> _verifyFace(String code) async {
+  Future<VerifyResult> _verifyFace(String code) async {
+    //Con Ngrok es posible usar desde el celular el emulador en docker para las pruebas
     //await _bcsFaceVerifyPlugin.setUrlService("https://674c-84-17-40-112.ngrok-free.app");
     return _bcsFaceVerifyPlugin.faceVerify(code);
   }
