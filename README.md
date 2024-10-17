@@ -1,9 +1,4 @@
-author: BCS
-summary: Integración BCS en flutter
 id: bcs-face-flutter
-categories: codelab,markdown
-environments: Android
-status: Published
 
 # Como usar BCS en Flutter - Android
 
