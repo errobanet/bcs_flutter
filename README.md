@@ -78,7 +78,7 @@ dependencies:
 ```
 
 <aside class="positive">
-No olvides hacer el 'pub get'
+No olvides hacer el 'flutter pub get'
 </aside>
 
 Para mas información del uso del plugin podes visitar [este sitio.](https://pub.dev/packages/permission_handler)
@@ -103,7 +103,7 @@ Ahora vamos a configurar el proyecto de `Android` para utilizar BCS.
 
 Primero vamos a copiar algunas librerias nativas que son necesarias que funcione el proyecto.
 
-1. Copia el archivo `bcssdk-x.x.x.aar` a la carpeta `android/app/libs`
+1. Copia el archivo `bcssdk-x.x.x.aar` (que esta en [GitHub](https://github.com/errobanet/bcs_flutter/tree/main/android/app/libs)) a la carpeta `android/app/libs`
 2. Edita el archivo `android/app/build.gradle`, cambia la `minSdk` por `26` y agrega la dependencia `implementation files('libs/bcssdk-1.0.0.aar')`:
 
 ```Groovy
@@ -117,6 +117,7 @@ dependencies {
     implementation files('libs/bcssdk-1.0.0.aar')
 }
 ```
+
 
 Debería quedarte algo así:
 
