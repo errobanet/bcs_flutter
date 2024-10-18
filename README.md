@@ -177,7 +177,7 @@ class BCSPlugin : FlutterPlugin{
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, CHANNEL)
-        context = binding.applicationContext;
+        context = binding.applicationContext
         channel.setMethodCallHandler(this::onMethodCall)
     }
 
@@ -267,6 +267,7 @@ La respuesta de la llamada a `faceVerify` es una enumeración `VerifyResult`. Pu
 * CANCELED
 * PERMISSIONS_ERROR
 * CONNECTION_ERROR
+* TRANSACTION_NOT_FOUND
 
 <aside class="positive">
 Según la respuesta obtenida es la acción que debes realizar en tu app.
@@ -288,6 +289,9 @@ Esta respuesta se da cuando no hay permisos para cámara y microfono, debes habe
 
 No fue posible conectar con los servidores de BCS, puede deberse a un problema de conectividad entre el dispositivo e internet/servidores de BCS.
 
+### TRANSACTION_NOT_FOUND
+
+No se encontró la transacción x el identificador `code`. Ten en cuenta que después de creada solo puede ser procesada en un período corto de tiempo. 
 
 ## Ambiente QA/Docker
 
