@@ -40,5 +40,5 @@ flutter {
 }
 
 dependencies {
-    implementation files('libs/bcssdk-1.0.0.aar')
+    implementation files('libs/bcssdk-1.0.1.aar')
 }

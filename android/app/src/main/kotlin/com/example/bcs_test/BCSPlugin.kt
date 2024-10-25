@@ -28,8 +28,22 @@ class BCSPlugin : FlutterPlugin{
             val url = call.argument<String>("url")
             setUrlService(url!!, result)
         }
+        else if (call.method == "setColors") {
+            val primary = call.argument<String>("primary")
+            val onPrimary = call.argument<String>("onPrimary")
+            setColors(primary!!,onPrimary!!, result)
+        }
         else {
             result.notImplemented()
+        }
+    }
+
+    private fun setColors(primary: String, onPrimary: String, result: MethodChannel.Result) {
+        if (com.erroba.bcssdk.BCSClient.setColors(primary, onPrimary)) {
+            result.success("OK")
+        }
+        else {
+            result.error("VALIDATION", "Invalid color. Format: #001122", null);
         }
     }
 
@@ -40,8 +54,12 @@ class BCSPlugin : FlutterPlugin{
     }
 
     private fun setUrlService(url: String, result: MethodChannel.Result) {
-        com.erroba.bcssdk.BCSClient.setUrlService(url)
-        result.success("OK")
+        if (com.erroba.bcssdk.BCSClient.setUrlService(url)) {
+            result.success("OK")
+        }
+        else {
+            result.error("VALIDATION", "Invalid url", null);
+        }
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {

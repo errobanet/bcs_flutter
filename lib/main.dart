@@ -22,11 +22,27 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _initializePluginColors();
+  }
+
+  Future<void> _initializePluginColors() async {
+    // Obtener los colores del tema actual y se los paso al plugin.
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    await _bcsFaceVerifyPlugin.setColors(primary, onPrimary);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        theme: ThemeData(
+        useMaterial3: true,
+        // Define the default brightness and colors.
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.purple,
+          brightness: Brightness.light,
+          ),
+        ),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Demo BCS'),
@@ -45,6 +61,10 @@ class _MyAppState extends State<MyApp> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              ),
                 onPressed: () => processVerifyAsync(_codeController.text ),
                 child: Text('Verificar'),
               ),
@@ -70,8 +90,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<VerifyResult> _verifyFace(String code) async {
-    //Con Ngrok es posible usar desde el celular el emulador en docker para las pruebas
-    //await _bcsFaceVerifyPlugin.setUrlService("https://674c-84-17-40-112.ngrok-free.app");
+    //Podemos establecer la URL al ambiente de desarrollo
+    await _bcsFaceVerifyPlugin.setUrlService("https://bas.develop.ex-cle.com");
     return _bcsFaceVerifyPlugin.faceVerify(code);
   }
 

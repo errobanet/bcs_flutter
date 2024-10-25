@@ -55,9 +55,18 @@ class BcsFaceVerify {
   Future<void> setUrlService(String url) async {
     await methodChannel.invokeMethod<String>('setUrlService', <String, dynamic>{'url': url});
   }
+
+  Future<void> setColors(Color primary, Color onPrimary) async {
+    await methodChannel.invokeMethod<String>('setColors', <String, dynamic>{'primary': colorToHex(primary), 'onPrimary':  colorToHex(onPrimary)});
+  }
+
+  String colorToHex(Color color) {
+    String hexColor = color.value.toRadixString(16).padLeft(8, '0');
+    return '#${hexColor.substring(2)}'; // Omite los dos primeros caracteres que corresponden al alfa
+  }
 }
 
-enum VerifyResult { DONE, CANCELED, PERMISSIONS_ERROR, CONNECTION_ERROR }
+enum VerifyResult { DONE, CANCELED, PERMISSIONS_ERROR, CONNECTION_ERROR, TRANSACTION_NOT_FOUND }
 ```
 
 ## Permisos
@@ -160,8 +169,22 @@ class BCSPlugin : FlutterPlugin{
             val url = call.argument<String>("url")
             setUrlService(url!!, result)
         }
+        else if (call.method == "setColors") {
+            val primary = call.argument<String>("primary")
+            val onPrimary = call.argument<String>("onPrimary")
+            setColors(primary!!,onPrimary!!, result)
+        }
         else {
             result.notImplemented()
+        }
+    }
+
+    private fun setColors(primary: String, onPrimary: String, result: MethodChannel.Result) {
+        if (com.erroba.bcssdk.BCSClient.setColors(primary, onPrimary)) {
+            result.success("OK")
+        }
+        else {
+            result.error("VALIDATION", "Invalid color. Format: #001122", null);
         }
     }
 
@@ -172,13 +195,17 @@ class BCSPlugin : FlutterPlugin{
     }
 
     private fun setUrlService(url: String, result: MethodChannel.Result) {
-        com.erroba.bcssdk.BCSClient.setUrlService(url)
-        result.success("OK")
+        if (com.erroba.bcssdk.BCSClient.setUrlService(url)) {
+            result.success("OK")
+        }
+        else {
+            result.error("VALIDATION", "Invalid url", null);
+        }
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, CHANNEL)
-        context = binding.applicationContext
+        context = binding.applicationContext;
         channel.setMethodCallHandler(this::onMethodCall)
     }
 
@@ -293,6 +320,24 @@ No fue posible conectar con los servidores de BCS, puede deberse a un problema d
 ### TRANSACTION_NOT_FOUND
 
 No se encontró la transacción x el identificador `code`. Ten en cuenta que después de creada solo puede ser procesada en un período corto de tiempo. 
+
+## Estilos
+
+La interfaz de la verificación es minimalista, el único control de interacción con el usuario es un botón para `Reintentar` la operación.
+
+Podes establecer los colores para los controles llamando al la función `setColors` del plugin. 
+
+```dart
+  Future<void> _initializePluginColors() async {
+    // Obtener los colores del tema actual y se los paso al plugin.
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    await _bcsFaceVerifyPlugin.setColors(primary, onPrimary);
+  }
+```
+
+
+
 
 ## Ambiente QA/Docker
 
