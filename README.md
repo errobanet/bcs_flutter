@@ -336,9 +336,6 @@ Podes establecer los colores para los controles llamando al la función `setColo
   }
 ```
 
-
-
-
 ## Ambiente QA/Docker
 
 Por defecto el cliente utiliza el ambiente productivo. Si deseas usar al ambiente de calidad o desarrollo con docker podes cambiar la URL de los servicios.
