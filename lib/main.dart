@@ -100,8 +100,8 @@ class _MyAppState extends State<MyApp> {
 
   Future<VerifyResult> _verifyFace(String code) async {
     //Podemos establecer la URL al ambiente de desarrollo
-
-    await _bcsFaceVerifyPlugin.setUrlService(_urlController.text);
+    var url = _urlController.text;
+    await _bcsFaceVerifyPlugin.setUrlService(url);
     return _bcsFaceVerifyPlugin.faceVerify(code);
   }
 
