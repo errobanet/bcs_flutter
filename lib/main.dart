@@ -16,12 +16,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _result = '-';
+  final _urlController = TextEditingController();
   final _codeController = TextEditingController();
   final _bcsFaceVerifyPlugin = BcsFaceVerify();
 
   @override
   void initState() {
     super.initState();
+    _urlController.text = "https://bas.develop.ex-cle.com";
     _initializePluginColors();
   }
 
@@ -52,6 +54,13 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              TextField(
+                controller: _urlController,
+                decoration: const InputDecoration(
+                  labelText: "Url Base",
+                ),
+                keyboardType: TextInputType.url,
+              ),
               TextField(
                 controller: _codeController,
                 decoration: const InputDecoration(
@@ -91,7 +100,8 @@ class _MyAppState extends State<MyApp> {
 
   Future<VerifyResult> _verifyFace(String code) async {
     //Podemos establecer la URL al ambiente de desarrollo
-    await _bcsFaceVerifyPlugin.setUrlService("https://bas.develop.ex-cle.com");
+
+    await _bcsFaceVerifyPlugin.setUrlService(_urlController.text);
     return _bcsFaceVerifyPlugin.faceVerify(code);
   }
 
