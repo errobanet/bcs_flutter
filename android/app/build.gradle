@@ -39,9 +39,9 @@ android {
 }
 
 flutter {
-    source = "../.."
+    source = "../.."ß
 }
 
 dependencies {
-    implementation files('libs/bcssdk-1.2.2.aar')
+    implementation files('libs/bcssdk-1.3.0.aar')
 }
